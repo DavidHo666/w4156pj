@@ -65,8 +65,14 @@ Test:
 
 
 
-## API Entry Points
+## Guidance for Testing
 
+### HTTP Responses
+Different HTTP response results for different requests:
+1. **[200 OK]** for success requests. 
+2. **[403 Forbidden]** for invalid client ID.
+
+### API Entry Points
 Client:
 1. POST http://localhost:8080/api/v1/client/register
 
