@@ -9,7 +9,9 @@ import com.insomnia_studio.w4156pj.repository.PostEntityRepository;
 import com.insomnia_studio.w4156pj.repository.UserEntityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -22,75 +24,78 @@ public class PostServiceImpl implements PostService {
     private UserEntityRepository userEntityRepository;
 
     @Override
-    public Post addPost(Post post) throws Exception {
-        try {
-            // TO BE FIXED: should return error message if client is not valid
-            if (post.getClientId() != null && clientEntityRepository.existsByClientId(post.getClientId())) {
-                PostEntity postEntity = new PostEntity();
-                BeanUtils.copyProperties(post, postEntity);
-                UserEntity userEntity = userEntityRepository.findByUserId(post.getUserId());
-                postEntity.setUser(userEntity);
-                ClientEntity clientEntity = clientEntityRepository.findByClientId(post.getClientId());
-                postEntity.setClient(clientEntity);
-                postEntity = postEntityRepository.save(postEntity);
-                post.setPostId(postEntity.getPostId());
-                post.setPostCreatedTime(postEntity.getPostCreatedTime());
-                post.setPostUpdatedTime(postEntity.getPostUpdatedTime());
-                return post;
-            } else {
-                return null;
+    public Post addPost(Post post) throws ResponseStatusException {
+        if (post.getClientId() != null && clientEntityRepository.existsByClientId(post.getClientId())) {
+            PostEntity postEntity = new PostEntity();
+            BeanUtils.copyProperties(post, postEntity);
+            UserEntity userEntity = userEntityRepository.findByUserId(post.getUserId());
+            if (userEntity == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
+            } else if (userEntity.getClient().getClientId().compareTo(post.getClientId()) != 0) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Client ID");
             }
-        } catch (Exception e) {
-            throw new Exception("Could not save Post: " + e);
+            postEntity.setUser(userEntity);
+            ClientEntity clientEntity = clientEntityRepository.findByClientId(post.getClientId());
+            postEntity.setClient(clientEntity);
+            postEntity = postEntityRepository.save(postEntity);
+            post.setPostId(postEntity.getPostId());
+            post.setPostCreatedTime(postEntity.getPostCreatedTime());
+            post.setPostUpdatedTime(postEntity.getPostUpdatedTime());
+            return post;
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Client ID");
         }
     }
 
     @Override
-    public Post getPostById(UUID postId) throws Exception {
+    public Post getPostById(UUID postId, Post post) throws ResponseStatusException {
+        PostEntity postEntity = postEntityRepository.findByPostId(postId);
+        if (postEntity != null) {
+            if (postEntity.getClient().getClientId().compareTo(post.getClientId()) != 0) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Client ID");
+            }
+            Post responsePost = new Post();
+            BeanUtils.copyProperties(postEntity, responsePost);
+            responsePost.setUserId(postEntity.getUser().getUserId());
+            responsePost.setClientId(postEntity.getClient().getClientId());
+            return responsePost;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post ID not found");
+        }
+    }
 
-        try{
-            PostEntity postEntity = postEntityRepository.findByPostId(postId);
-            Post post = new Post();
+    @Override
+    public Post updatePostById(UUID postId, Post post) throws ResponseStatusException {
+
+        PostEntity postEntity = postEntityRepository.findByPostId(postId);
+        if (postEntity != null) {
+            if (postEntity.getClient().getClientId().compareTo(post.getClientId()) != 0) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Client ID");
+            }
+            postEntity.setTitle(post.getTitle());
+            postEntity.setContent(post.getContent());
+            postEntity.setTags(post.getTags());
+            postEntity = postEntityRepository.save(postEntity);
             BeanUtils.copyProperties(postEntity, post);
             post.setUserId(postEntity.getUser().getUserId());
             post.setClientId(postEntity.getClient().getClientId());
             return post;
-        }
-        catch (Exception e){
-            throw new Exception("Could not find postId: " + e);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post ID not found");
         }
     }
 
     @Override
-    public Post updatePostById(UUID postId, Post post) throws Exception {
-        try {
-            if (post.getClientId() != null && clientEntityRepository.existsByClientId(post.getClientId())) {
-                PostEntity postEntity = postEntityRepository.findByPostId(postId);
-                postEntity.setTitle(post.getTitle());
-                postEntity.setContent(post.getContent());
-                postEntity.setTags(post.getTags());
-                postEntity = postEntityRepository.save(postEntity);
-                BeanUtils.copyProperties(postEntity, post);
-                post.setUserId(postEntity.getUser().getUserId());
-                post.setClientId(postEntity.getClient().getClientId());
-                return post;
-            } else {
-                return null;
+    public Boolean deletePostById(UUID postId, Post post) throws ResponseStatusException{
+        PostEntity postEntity = postEntityRepository.findByPostId(postId);
+        if (postEntity != null) {
+            if (postEntity.getClient().getClientId().compareTo(post.getClientId()) != 0) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Client ID");
             }
-        } catch (Exception e) {
-            throw new Exception("Could not update Post: " + e);
-        }
-    }
-
-    @Override
-    public Boolean deletePostById(UUID postId, Post post) {
-        if (post.getClientId() != null && clientEntityRepository.existsByClientId(post.getClientId())) {
             Boolean is_deleted = (postEntityRepository.deletePostEntityByPostId(postId) == 1);
             return is_deleted;
         } else {
-            return false;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post ID not found");
         }
     }
-
-
 }

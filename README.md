@@ -63,16 +63,18 @@ Test:
 		b. in the Postman, send example requests to the endpoints specified in the next section  
 		
 
+## Guidance for checking
 
-
-## Guidance for Testing
-
-### HTTP Responses
-Different HTTP response results for different requests:
-1. **[200 OK]** for success requests. 
-2. **[403 Forbidden]** for invalid client ID.
-
+### HTTP response
+1. **[200 OK]** for success requests.
+2. **[404 Not Found]** for GET, PUT, or DELETE comment, post and user with invalid comment, post and user ID.
+3. **[404 Not Found]** for POST comment with invalid post ID 
+4. **[404 Not Found]** for add/delete User follower list with not existed user ID.
+5. **[403 Forbidden]** for any requests with invalid client ID.
+6. **[422 Unprocessable Entity]** for POST user without entering user ID in the request body.
+7. **[400 Bad Request]** for using incorrect format when sending requests.
 ### API Entry Points
+
 Client:
 1. POST http://localhost:8080/api/v1/client/register
 
