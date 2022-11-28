@@ -307,7 +307,7 @@ class W4156ApplicationTests {
 	@Test
 	@Order(15)
 	void testGetCommentValidClientValidUser() throws Exception {
-		Comment comment = new Comment(testClientId, testUserId, testPostId, 10, 2, "testComment");
+		Comment comment = new Comment(testClientId);
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
 						.get("/api/v1/comment/".concat(testCommentId.toString()))
@@ -326,7 +326,7 @@ class W4156ApplicationTests {
 	@Test
 	@Order(16)
 	void testGetCommentInValidClientValidUser() throws Exception {
-		Comment comment = new Comment(fakeClientId, testUserId, testPostId, 10, 2, "testComment");
+		Comment comment = new Comment(fakeClientId);
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
 						.get("/api/v1/comment/".concat(testCommentId.toString()))
@@ -340,7 +340,7 @@ class W4156ApplicationTests {
 	@Test
 	@Order(17)
 	void testGetCommentInvalidClientInvalidComment() throws Exception {
-		Comment comment = new Comment(testClientId, testUserId, testPostId, 10, 2, "testComment");
+		Comment comment = new Comment(testClientId);
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
 						.get("/api/v1/comment/".concat(fakeCommentId.toString()))
@@ -400,6 +400,90 @@ class W4156ApplicationTests {
 
 	@Test
 	@Order(21)
+	void testAddLikeToCommentValidClientValidCommentId() throws Exception {
+		Comment comment = new Comment(testClientId);
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+						.post("/api/v1/comment/".concat(testCommentId.toString()).concat("/addLike"))
+						.content(new ObjectMapper().writeValueAsString(comment))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.likesNum").value(11))
+				.andReturn();
+
+	}
+
+	@Test
+	@Order(22)
+	void testAddDislikeToCommentValidClientValidCommentId() throws Exception {
+		Comment comment = new Comment(testClientId);
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+						.post("/api/v1/comment/".concat(testCommentId.toString()).concat("/addDislike"))
+						.content(new ObjectMapper().writeValueAsString(comment))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.dislikesNum").value(3))
+				.andReturn();
+
+	}
+
+	@Test
+	@Order(23)
+	void testAddLikeToCommentInvalidClientValidCommentId() throws Exception {
+		Comment comment = new Comment(fakeClientId);
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+						.post("/api/v1/comment/".concat(testCommentId.toString()).concat("/addLike"))
+						.content(new ObjectMapper().writeValueAsString(comment))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isForbidden())
+				.andReturn();
+
+	}
+
+	@Test
+	@Order(24)
+	void testAddDislikeToCommentInvalidClientValidCommentId() throws Exception {
+		Comment comment = new Comment(fakeClientId);
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+						.post("/api/v1/comment/".concat(testCommentId.toString()).concat("/addDislike"))
+						.content(new ObjectMapper().writeValueAsString(comment))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isForbidden())
+				.andReturn();
+
+	}
+
+	@Test
+	@Order(25)
+	void testAddLikeToCommentValidClientInvalidCommentId() throws Exception {
+		Comment comment = new Comment(testClientId);
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+						.post("/api/v1/comment/".concat(fakeCommentId.toString()).concat("/addLike"))
+						.content(new ObjectMapper().writeValueAsString(comment))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isNotFound())
+				.andReturn();
+
+	}
+
+	@Test
+	@Order(26)
+	void testAddDislikeToCommentValidClientInvalidCommentId() throws Exception {
+		Comment comment = new Comment(testClientId);
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+						.post("/api/v1/comment/".concat(fakeCommentId.toString()).concat("/addDislike"))
+						.content(new ObjectMapper().writeValueAsString(comment))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isNotFound())
+				.andReturn();
+
+	}
+
+	@Test
+	@Order(27)
 	void testDeleteCommentValidClientValidComment() throws Exception {
 		Comment comment = new Comment(testClientId, testUserId, testPostId, 10, 2, "testComment3");
 
@@ -415,7 +499,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(22)
+	@Order(28)
 	void testDeleteCommentInvalidClientValidComment() throws Exception {
 		Comment comment = new Comment(fakeClientId, testUserId, testPostId, 10, 2, "testComment4");
 
@@ -429,7 +513,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(23)
+	@Order(29)
 	void testDeleteCommentValidClientInvalidComment() throws Exception {
 		Comment comment = new Comment(fakeClientId, testUserId, testPostId, 10, 2, "testComment5");
 
