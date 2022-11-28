@@ -45,4 +45,8 @@ public class Comment {
         this.content = content;
     }
 
+    public Comment(UUID clientId) {
+        this.clientId = clientId;
+    }
+
 }

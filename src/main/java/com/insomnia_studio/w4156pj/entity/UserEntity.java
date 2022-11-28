@@ -65,19 +65,19 @@ public class UserEntity {
         postEntity.setUser(null);
     }
 
-    public void addFollower(UUID followId) {
-        followers.add(followId);
-    }
-
-    public void addFollowedBy(UUID userId) {
-        followedBy.add(userId);
-    }
-
-    public void removeFollower(UUID followId) {
-        followers.remove(followId);
-    }
-
-    public void removeFollowBy(UUID userId) {
-        followedBy.remove(userId);
-    }
+//    public void addFollower(UUID followId) {
+//        followers.add(followId);
+//    }
+//
+//    public void addFollowedBy(UUID userId) {
+//        followedBy.add(userId);
+//    }
+//
+//    public void removeFollower(UUID followId) {
+//        followers.remove(followId);
+//    }
+//
+//    public void removeFollowBy(UUID userId) {
+//        followedBy.remove(userId);
+//    }
 }
