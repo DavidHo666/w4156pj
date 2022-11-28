@@ -34,4 +34,8 @@ public class ClientEntity {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserEntity> users;
 
+    public ClientEntity(UUID clientId, String clientName) {
+        this.clientId = clientId;
+        this.clientName = clientName;
+    }
 }

@@ -80,4 +80,11 @@ public class UserEntity {
     public void removeFollowBy(UUID userId) {
         followedBy.remove(userId);
     }
+
+    public UserEntity(UUID userId, String firstName, String lastName, ClientEntity client) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.client = client;
+    }
 }

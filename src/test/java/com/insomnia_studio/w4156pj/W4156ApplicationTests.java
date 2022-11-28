@@ -439,7 +439,8 @@ class W4156ApplicationTests {
 						.content(new ObjectMapper().writeValueAsString(comment))
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.status().isNotFound());
+				.andExpect(MockMvcResultMatchers.status().isNotFound()
+				);
 	}
 
 

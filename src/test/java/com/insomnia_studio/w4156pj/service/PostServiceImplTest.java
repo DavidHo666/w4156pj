@@ -49,6 +49,7 @@ public class PostServiceImplTest {
     private Post newpost;
     private PostEntity newPostEntity;
     private Post updatePost;
+
     /*
     @BeforeEach
     public void setup(){
@@ -100,8 +101,8 @@ public class PostServiceImplTest {
     }
 
 
-     */
-    /*
+
+
     //JUnit Test for addPostsuccess
     @Test
     public void testAddPostsuccess() throws Exception {

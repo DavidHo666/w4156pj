@@ -71,4 +71,11 @@ public class CommentEntity implements Serializable {
 
     @Lob
     private String content;
+
+    public CommentEntity(UUID commentId, UserEntity user, ClientEntity client, PostEntity post) {
+        this.commentId = commentId;
+        this.user = user;
+        this.client = client;
+        this.post = post;
+    }
 }

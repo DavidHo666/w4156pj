@@ -75,4 +75,10 @@ public class PostEntity {
         this.postCreatedTime = postCreatedTime;
         this.postUpdatedTime = postUpdatedTime;
     }
+
+    public PostEntity(UUID postId, UserEntity user, ClientEntity client) {
+        this.postId = postId;
+        this.user = user;
+        this.client = client;
+    }
 }

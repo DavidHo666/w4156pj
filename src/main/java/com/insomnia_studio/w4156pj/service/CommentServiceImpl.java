@@ -45,6 +45,8 @@ public class CommentServiceImpl implements CommentService{
             BeanUtils.copyProperties(comment, commentEntity);
             commentEntity.setPost(postEntity);
             UserEntity userEntity = userEntityRepository.findByUserId(comment.getUserId());
+            System.out.println(comment.getUserId());
+            System.out.println(userEntity);
             if (userEntity == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
             } else if (userEntity.getClient().getClientId().compareTo(comment.getClientId()) != 0) {
