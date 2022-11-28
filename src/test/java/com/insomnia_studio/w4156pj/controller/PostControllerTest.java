@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.*;
 import static org.mockito.Mockito.when;
 
-/*
+
 @WebMvcTest(PostControllerTest.class)
 
 public class PostControllerTest {
@@ -31,24 +31,28 @@ public class PostControllerTest {
     @Test
     public void testAddPost() throws Exception {
 
-        UUID id = UUID.randomUUID();
-        Post post = new Post(id,new HashSet<>(Arrays.asList("tag1")),"title1","content1",new Date(), new Date());
+        UUID postId = UUID.randomUUID();
+        UUID clientId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        Post post = new Post(postId, clientId, userId, "testPost", "testPost");
         when(postService.addPost(post)).thenReturn(post);
         Post addedpost = postController.addPost(post);
         assertEquals(post,addedpost);
-
     }
+
 
     /*
     @DisplayName("Test for getpostbyid Method non-null return")
     @Test
-    public void testgetPostByPostIdtrue(){
+    public void testGetPostByPostIdTrue(){
         //setup
-        UUID id = UUID.randomUUID();
-        Post post = new Post(id,new HashSet<>(Arrays.asList("tag1")),"title1","content1",new Date(), new Date());
+        UUID postId = UUID.randomUUID();
+        UUID clientId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        Post post = new Post(postId, clientId, userId, "testPost", "testPost");
 
         //when
-        when(postService.getPostById(id)).thenReturn(Optional.of(post));
+        when(postService.getPostById(postId)).thenReturn();
 
         //test
         Optional<Post> foundpost = postController.getPostByPostId(id);
@@ -57,6 +61,7 @@ public class PostControllerTest {
         assertTrue(foundpost.isPresent());
         assertEquals(post,foundpost.get());
     }
+
 
     @DisplayName("Test for getpostbyid Method null return")
     @Test
@@ -149,5 +154,6 @@ public class PostControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.postUpdatedTime").exists())
                 .andExpect(status().isCreated());
     }
+
+     */
 }
-*/
