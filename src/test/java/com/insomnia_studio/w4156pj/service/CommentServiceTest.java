@@ -229,5 +229,5 @@ public class CommentServiceTest {
             Assertions.assertEquals(e.getStatus(), HttpStatus.FORBIDDEN);
         }
     }
-    
+
 }

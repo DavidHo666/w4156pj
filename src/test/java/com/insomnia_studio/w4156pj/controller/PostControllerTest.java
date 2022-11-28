@@ -26,6 +26,7 @@ public class PostControllerTest {
     private PostController postController;
 
 
+
     @DisplayName("Test for AddPost Method")
     @Test
     public void testAddPost() throws Exception {
@@ -38,6 +39,7 @@ public class PostControllerTest {
 
     }
 
+    /*
     @DisplayName("Test for getpostbyid Method non-null return")
     @Test
     public void testgetPostByPostIdtrue(){

@@ -65,7 +65,14 @@ public class UserEntity {
         postEntity.setUser(null);
     }
 
-//    public void addFollower(UUID followId) {
+    public UserEntity(UUID userId, String firstName, String lastName, ClientEntity client) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.client = client;
+    }
+
+    //    public void addFollower(UUID followId) {
 //        followers.add(followId);
 //    }
 //
