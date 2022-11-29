@@ -1,13 +1,11 @@
 package com.insomnia_studio.w4156pj.model;
 
-import com.insomnia_studio.w4156pj.entity.ClientEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,15 +14,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
-    private UUID postId;
+  private UUID postId;
 
-    private UUID clientId;
-    private Set<String> tags;
-    private UUID userId;
-    private String title;
-    private String content;
-    private Date postCreatedTime;
-    private Date postUpdatedTime;
+  private UUID clientId;
+  private Set<String> tags;
+  private UUID userId;
+  private String title;
+  private String content;
+  private Date postCreatedTime;
+  private Date postUpdatedTime;
 
 //     Used for the test in the first iteration
 
@@ -39,23 +37,23 @@ public class Post {
 //        this.postUpdatedTime = postUpdatedTime;
 //    }
 
-    public Post(UUID postId, UUID clientId, UUID userId, String title, String content) {
-        this.postId = postId;
-        this.clientId = clientId;
-        this.userId = userId;
-        this.title = title;
-        this.content = content;
-    }
+  public Post(UUID postId, UUID clientId, UUID userId, String title, String content) {
+    this.postId = postId;
+    this.clientId = clientId;
+    this.userId = userId;
+    this.title = title;
+    this.content = content;
+  }
 
-    public Post(UUID clientId, UUID userId, String title, String content, Set<String> tags) {
-        this.clientId = clientId;
-        this.userId = userId;
-        this.title = title;
-        this.content = content;
-        this.tags = tags;
-    }
+  public Post(UUID clientId, UUID userId, String title, String content, Set<String> tags) {
+    this.clientId = clientId;
+    this.userId = userId;
+    this.title = title;
+    this.content = content;
+    this.tags = tags;
+  }
 
-    public Post(UUID clientId) {
-        this.clientId = clientId;
-    }
+  public Post(UUID clientId) {
+    this.clientId = clientId;
+  }
 }

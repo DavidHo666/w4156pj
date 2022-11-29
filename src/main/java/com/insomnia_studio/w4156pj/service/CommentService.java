@@ -6,15 +6,15 @@ import java.util.UUID;
 
 public interface CommentService {
 
-    Comment addComment(Comment comment, UUID postId) throws Exception;
+  Comment addComment(Comment comment, UUID postId) throws Exception;
 
-    Comment getCommentById(UUID commentId, Comment comment) throws Exception;
+  Comment getCommentById(UUID commentId, Comment comment) throws Exception;
 
-    Comment updateCommentById(UUID commentId, Comment comment) throws Exception;
+  Comment updateCommentById(UUID commentId, Comment comment) throws Exception;
 
-    Boolean deleteCommentById(UUID commentId, Comment comment) throws Exception;
+  Boolean deleteCommentById(UUID commentId, Comment comment) throws Exception;
 
-    Comment addLikeById(UUID commentId, Comment comment);
+  Comment addLikeById(UUID commentId, Comment comment);
 
-    Comment addDislikeById(UUID commentId, Comment comment);
+  Comment addDislikeById(UUID commentId, Comment comment);
 }
