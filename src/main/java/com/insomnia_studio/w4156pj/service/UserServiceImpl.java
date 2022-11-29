@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
+/**
+ * Define User Service Impl.
+ */
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
