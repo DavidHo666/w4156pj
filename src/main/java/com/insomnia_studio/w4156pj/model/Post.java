@@ -1,14 +1,14 @@
 package com.insomnia_studio.w4156pj.model;
 
+import java.util.Date;
+import java.util.Set;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
-
+/*** Define Post.*/
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,18 +24,7 @@ public class Post {
   private Date postCreatedTime;
   private Date postUpdatedTime;
 
-//     Used for the test in the first iteration
-
-//    public Post(UUID postId, Set<String> tags, UUID userID, UUID clientId,String title, String content, Date postCreatedTime, Date postUpdatedTime) {
-//        this.postId = postId;
-//        this.userId = userID;
-//        this.clientId = clientId;
-//        this.tags = tags;
-//        this.title = title;
-//        this.content = content;
-//        this.postCreatedTime = postCreatedTime;
-//        this.postUpdatedTime = postUpdatedTime;
-//    }
+  /*** Define PostMethod .*/
 
   public Post(UUID postId, UUID clientId, UUID userId, String title, String content) {
     this.postId = postId;
@@ -44,6 +33,7 @@ public class Post {
     this.title = title;
     this.content = content;
   }
+  /*** Define PostMethod .*/
 
   public Post(UUID clientId, UUID userId, String title, String content, Set<String> tags) {
     this.clientId = clientId;
@@ -52,6 +42,7 @@ public class Post {
     this.content = content;
     this.tags = tags;
   }
+  /*** Define PostMethod .*/
 
   public Post(UUID clientId) {
     this.clientId = clientId;

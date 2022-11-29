@@ -1,17 +1,17 @@
 package com.insomnia_studio.w4156pj.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.*;
+import javax.transaction.Transactional;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
+/*** Define PostEntity.*/
 @Entity
 @Table(name = "post")
 @Data
@@ -49,7 +49,7 @@ public class PostEntity {
   private Set<String> tags = new HashSet<>();
 
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-//    @JsonBackReference(value="comment-post")
+
   private Set<CommentEntity> comments = new HashSet<>();
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -57,6 +57,8 @@ public class PostEntity {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date postUpdatedTime;
+
+  /*** Define PostMethod .*/
 
   public PostEntity(UUID postId, UserEntity user, ClientEntity client) {
     this.postId = postId;
@@ -68,18 +70,6 @@ public class PostEntity {
   protected void onCreate() {
     postCreatedTime = new Date();
   }
-
-  // Used for the test in the first iteration
-//    public PostEntity(UUID postId, ClientEntity client, String title, String content, Set<String> tags, Set<CommentEntity> comments, Date postCreatedTime, Date postUpdatedTime) {
-//        this.postId = postId;
-//        this.client = client;
-//        this.title = title;
-//        this.content = content;
-//        this.tags = tags;
-//        this.comments = comments;
-//        this.postCreatedTime = postCreatedTime;
-//        this.postUpdatedTime = postUpdatedTime;
-//    }
 
   @PreUpdate
   protected void onUpdate() {
