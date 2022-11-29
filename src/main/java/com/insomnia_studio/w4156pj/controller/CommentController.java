@@ -55,10 +55,9 @@ public class CommentController {
   /**
    * Define Delete Method.
    */
-  //delete
   @DeleteMapping("/comment/{commentId}")
   @Transactional
-  public Map<String, Boolean> eleteCommentByCommentId(@PathVariable UUID commentId,
+  public Map<String, Boolean> deleteCommentByCommentId(@PathVariable UUID commentId,
                                                        @RequestBody Comment comment)
       throws Exception {
     Map<String, Boolean> response = new HashMap<>();

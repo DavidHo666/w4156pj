@@ -396,7 +396,5 @@ public class PostServiceImplTest {
       Assertions.assertEquals(HttpStatus.FORBIDDEN, e.getStatus());
     }
   }
-
-
 }
 
