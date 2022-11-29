@@ -2,14 +2,16 @@ package com.insomnia_studio.w4156pj.controller;
 
 import com.insomnia_studio.w4156pj.model.Comment;
 import com.insomnia_studio.w4156pj.service.CommentService;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
-import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
+/**
+ * Define the Controller class for Comment.
+ */
 
 @RestController
 @RequestMapping("/api/v1")
@@ -50,16 +52,18 @@ public class CommentController {
     return commentService.addDislikeById(commentId, comment);
   }
 
+  /**
+   * Define Delete Method.
+   */
   //delete
   @DeleteMapping("/comment/{commentId}")
   @Transactional
-  public Map<String, Boolean> deleteCommentByCommentId(@PathVariable UUID commentId,
-                                                       @RequestBody Comment comment) throws Exception {
+  public Map<String, Boolean> eleteCommentByCommentId(@PathVariable UUID commentId,
+                                                       @RequestBody Comment comment)
+      throws Exception {
     Map<String, Boolean> response = new HashMap<>();
     boolean is_deleted = (commentService.deleteCommentById(commentId, comment));
     response.put("Deleted", is_deleted);
     return response;
   }
-
-
 }

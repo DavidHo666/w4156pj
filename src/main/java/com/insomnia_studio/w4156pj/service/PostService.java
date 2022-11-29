@@ -1,9 +1,9 @@
 package com.insomnia_studio.w4156pj.service;
 
 import com.insomnia_studio.w4156pj.model.Post;
-
 import java.util.UUID;
 
+/*** Define PostService.*/
 public interface PostService {
   Post addPost(Post post) throws Exception;
 

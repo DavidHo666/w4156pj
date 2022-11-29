@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
+/**
+ * Define User Service Impl.
+ */
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -82,8 +85,8 @@ public class UserServiceImpl implements UserService {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "The user has post or comment, can't be deleted.");
       }
-      Boolean is_deleted = (userEntityRepository.deleteUserEntityByUserId(userId) == 1);
-      return is_deleted;
+      Boolean isDeleted = (userEntityRepository.deleteUserEntityByUserId(userId) == 1);
+      return isDeleted;
     } else {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
     }

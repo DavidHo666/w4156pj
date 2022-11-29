@@ -7,14 +7,16 @@ import com.insomnia_studio.w4156pj.model.Post;
 import com.insomnia_studio.w4156pj.repository.ClientEntityRepository;
 import com.insomnia_studio.w4156pj.repository.PostEntityRepository;
 import com.insomnia_studio.w4156pj.repository.UserEntityRepository;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.UUID;
-
+/**
+ * Define PostService.
+ */
 @Service
 @AllArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -93,7 +95,8 @@ public class PostServiceImpl implements PostService {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Client ID");
       }
       if (postEntity.getComments().size() > 0) {
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The post has comments, can't be deleted.");
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "The post has comments, can't be deleted.");
       }
       Boolean is_deleted = (postEntityRepository.deletePostEntityByPostId(postId) == 1);
       return is_deleted;

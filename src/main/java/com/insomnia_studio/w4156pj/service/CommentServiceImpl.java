@@ -9,13 +9,15 @@ import com.insomnia_studio.w4156pj.repository.ClientEntityRepository;
 import com.insomnia_studio.w4156pj.repository.CommentEntityRepository;
 import com.insomnia_studio.w4156pj.repository.PostEntityRepository;
 import com.insomnia_studio.w4156pj.repository.UserEntityRepository;
+import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.UUID;
-
+/**
+ * Define the Service class for Comment.
+ */
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -25,7 +27,13 @@ public class CommentServiceImpl implements CommentService {
 
   private UserEntityRepository userEntityRepository;
 
-  public CommentServiceImpl(CommentEntityRepository commentEntityRepository, PostEntityRepository postEntityRepository, ClientEntityRepository clientEntityRepository, UserEntityRepository userEntityRepository) {
+  /**
+   * Implement Comment Service functions.
+   */
+  public CommentServiceImpl(CommentEntityRepository commentEntityRepository,
+                            PostEntityRepository postEntityRepository,
+                            ClientEntityRepository clientEntityRepository,
+                            UserEntityRepository userEntityRepository) {
     this.commentEntityRepository = commentEntityRepository;
     this.postEntityRepository = postEntityRepository;
     this.clientEntityRepository = clientEntityRepository;
@@ -52,8 +60,12 @@ public class CommentServiceImpl implements CommentService {
       commentEntity.setUser(userEntity);
       ClientEntity clientEntity = clientEntityRepository.findByClientId(comment.getClientId());
       commentEntity.setClient(clientEntity);
-      if (comment.getLikesNum() == null) commentEntity.setLikesNum(0);
-      if (comment.getDislikesNum() == null) commentEntity.setDislikesNum(0);
+      if (comment.getLikesNum() == null) {
+        commentEntity.setLikesNum(0);
+      }
+      if (comment.getDislikesNum() == null) {
+        commentEntity.setDislikesNum(0);
+      }
       commentEntity = commentEntityRepository.save(commentEntity);
       BeanUtils.copyProperties(commentEntity, comment);
       comment.setPostId(postEntity.getPostId());

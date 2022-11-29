@@ -1,9 +1,11 @@
 package com.insomnia_studio.w4156pj.service;
 
 import com.insomnia_studio.w4156pj.model.Comment;
-
 import java.util.UUID;
 
+/**
+ * Define the interface of Comment Service class.
+ */
 public interface CommentService {
 
   Comment addComment(Comment comment, UUID postId) throws Exception;

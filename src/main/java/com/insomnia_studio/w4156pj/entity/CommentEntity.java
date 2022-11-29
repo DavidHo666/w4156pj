@@ -1,16 +1,19 @@
 package com.insomnia_studio.w4156pj.entity;
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.*;
+import javax.transaction.Transactional;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
+/**
+ * Define Comment Entity.
+ */
 
 @Entity
 @Table(name = "comment")
@@ -60,6 +63,9 @@ public class CommentEntity implements Serializable {
   @Lob
   private String content;
 
+  /**
+   * Define Custom Constructors.
+   */
   public CommentEntity(UUID commentId, UserEntity user, ClientEntity client, PostEntity post) {
     this.commentId = commentId;
     this.user = user;
