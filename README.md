@@ -182,7 +182,10 @@ Static Report:
 https://sonarcloud.io/summary/overall?id=DavidHo666_w4156pj
 
 Style Checker and Static Bug Finder:  
-![alt text](https://github.com/DavidHo666/w4156pj/blob/master/stylecheck-iter2.png?raw=true)
+![style check](https://github.com/DavidHo666/w4156pj/blob/master/stylecheck-iter2.png?raw=true)
 If image not shown correctly, it is also added to the repository
 Coverage Test:  
 under development
+
+Test Coverage:
+![test coverage](https://github.com/DavidHo666/w4156pj/blob/master/Coverage.png?raw=true)
