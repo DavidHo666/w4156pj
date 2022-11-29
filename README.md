@@ -62,6 +62,8 @@ Test:
 		a. have the project built and run on IntelliJ 
 		b. in the Postman, send example requests to the endpoints specified in the next section  
 		
+    Test in CI:  
+	    All Unit tests have been included in the Github Action and will run on every push.  
 
 ## Guidance for checking
 
@@ -176,12 +178,11 @@ Request body example:
 
 6. PUT http://localhost:8080/api/v1/user/{{userId}}/deleteFollower/{{followerId}}
 
+Static Report:
+https://sonarcloud.io/summary/overall?id=DavidHo666_w4156pj
+
 Style Checker and Static Bug Finder:  
-![alt text](https://github.com/DavidHo666/w4156pj/blob/master/stylecheck.png?raw=true)
+![alt text](https://github.com/DavidHo666/w4156pj/blob/master/stylecheck-iter2.png?raw=true)
 If image not shown correctly, it is also added to the repository
 Coverage Test:  
 under development
-
-Problem to be fixed:
-The comment POST API  and User API need to be fixed because we added new figures lastly. We will fix them during nex iteration.
-
