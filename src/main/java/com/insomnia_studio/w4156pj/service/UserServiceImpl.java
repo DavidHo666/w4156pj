@@ -5,14 +5,18 @@ import com.insomnia_studio.w4156pj.entity.UserEntity;
 import com.insomnia_studio.w4156pj.model.User;
 import com.insomnia_studio.w4156pj.repository.ClientEntityRepository;
 import com.insomnia_studio.w4156pj.repository.UserEntityRepository;
+import java.util.UUID;
+import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import javax.transaction.Transactional;
-import java.util.UUID;
 
+
+/**
+ * Define User Service Impl.
+ */
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -81,8 +85,8 @@ public class UserServiceImpl implements UserService {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "The user has post or comment, can't be deleted.");
       }
-      Boolean is_deleted = (userEntityRepository.deleteUserEntityByUserId(userId) == 1);
-      return is_deleted;
+      Boolean isDeleted = (userEntityRepository.deleteUserEntityByUserId(userId) == 1);
+      return isDeleted;
     } else {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
     }

@@ -1,13 +1,15 @@
 package com.insomnia_studio.w4156pj.model;
 
+import java.util.Date;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.UUID;
-
+/**
+ * Define Comment Model.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,7 +33,12 @@ public class Comment {
 
   private Date commentUpdatedTime;
 
-  public Comment(UUID clientId, UUID userId, UUID postId, Integer likesNum, Integer dislikesNum, String content) {
+  /**
+   * Define Custom Constructors.
+   */
+  public Comment(UUID clientId, UUID userId,
+                 UUID postId, Integer likesNum,
+                 Integer dislikesNum, String content) {
     this.clientId = clientId;
     this.userId = userId;
     this.postId = postId;
