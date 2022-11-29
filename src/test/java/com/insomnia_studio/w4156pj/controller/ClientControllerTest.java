@@ -14,26 +14,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 @AutoConfigureMockMvc
 public class ClientControllerTest {
 
-    @Autowired
-    private ClientController clientController;
+  @Autowired
+  private ClientController clientController;
 
-    private ClientService clientService;
+  private ClientService clientService;
 
-    @BeforeEach
-    void setUp() {
-        clientService = Mockito.mock(ClientService.class);
+  @BeforeEach
+  void setUp() {
+    clientService = Mockito.mock(ClientService.class);
 
-        clientController = new ClientController(clientService);
-    }
+    clientController = new ClientController(clientService);
+  }
 
-    @Test
-    void testRegister() {
-        Client client = new Client("a");
+  @Test
+  void testRegister() {
+    Client client = new Client("a");
 
-        Mockito.when(clientService.createClient(client)).thenReturn(client);
+    Mockito.when(clientService.createClient(client)).thenReturn(client);
 
-        Client addedClient = clientController.createClient(client);
-        Assertions.assertEquals(client, addedClient);
-    }
+    Client addedClient = clientController.createClient(client);
+    Assertions.assertEquals(client, addedClient);
+  }
 
 }

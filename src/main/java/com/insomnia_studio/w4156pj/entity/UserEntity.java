@@ -1,14 +1,18 @@
 package com.insomnia_studio.w4156pj.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
-import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -18,66 +22,47 @@ import java.util.*;
 @AllArgsConstructor
 public class UserEntity {
 
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Type(type="org.hibernate.type.UUIDCharType")
-    private UUID userId;
+  @Id
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
+  @Type(type = "org.hibernate.type.UUIDCharType")
+  private UUID userId;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clientId")
-    private ClientEntity client;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "clientId")
+  private ClientEntity client;
 
-    @ElementCollection
-    @CollectionTable(name = "user_followers")
-    private Set<UUID> followers = new HashSet<>();
+  @ElementCollection
+  @CollectionTable(name = "user_followers")
+  private Set<UUID> followers = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "user_followedBy")
-    private Set<UUID> followedBy = new HashSet<>();
+  @ElementCollection
+  @CollectionTable(name = "user_followedBy")
+  private Set<UUID> followedBy = new HashSet<>();
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date userCreatedTime;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date userCreatedTime;
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonIgnore
+  private Set<PostEntity> posts;
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private Set<CommentEntity> comments;
 
-    @PrePersist
-    protected void onCreate() {
-        userCreatedTime = new Date();
-    }
+  public UserEntity(UUID userId, String firstName, String lastName, ClientEntity client) {
+    this.userId = userId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.client = client;
+  }
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<PostEntity> posts;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<CommentEntity> comments;
+  @PrePersist
+  protected void onCreate() {
+    userCreatedTime = new Date();
+  }
 
-    public void addPost(PostEntity postEntity) {
-        posts.add(postEntity);
-        postEntity.setUser(this);
-    }
-
-    public void removePost(PostEntity postEntity) {
-        posts.remove(postEntity);
-        postEntity.setUser(null);
-    }
-
-    public void addFollower(UUID followId) {
-        followers.add(followId);
-    }
-
-    public void addFollowedBy(UUID userId) {
-        followedBy.add(userId);
-    }
-
-    public void removeFollower(UUID followId) {
-        followers.remove(followId);
-    }
-
-    public void removeFollowBy(UUID userId) {
-        followedBy.remove(userId);
-    }
 }

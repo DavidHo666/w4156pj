@@ -1,7 +1,5 @@
 package com.insomnia_studio.w4156pj.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -22,53 +20,60 @@ import java.util.UUID;
 @AllArgsConstructor
 @Transactional
 public class CommentEntity implements Serializable {
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Type(type="org.hibernate.type.UUIDCharType")
-    private UUID commentId;
+  @Id
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
+  @Type(type = "org.hibernate.type.UUIDCharType")
+  private UUID commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userId")
-    @EqualsAndHashCode.Exclude @ToString.Exclude
-    private UserEntity user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "userId")
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="clientId")
-    @EqualsAndHashCode.Exclude @ToString.Exclude
-    private ClientEntity client;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "clientId")
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private ClientEntity client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="postId")
-    @EqualsAndHashCode.Exclude @ToString.Exclude
-    private PostEntity post;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "postId")
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private PostEntity post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private CommentEntity parentComment;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private CommentEntity parentComment;
 
-    @OneToMany(mappedBy = "parentComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<CommentEntity> childComments = new HashSet<>();
+  @OneToMany(mappedBy = "parentComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private Set<CommentEntity> childComments = new HashSet<>();
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date commentCreatedTime;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date commentCreatedTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date commentUpdatedTime;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date commentUpdatedTime;
+  private Integer LikesNum;
+  private Integer dislikesNum;
+  @Lob
+  private String content;
 
-    @PrePersist
-    protected void onCreate() {
-        commentCreatedTime = new Date();
-    }
+  public CommentEntity(UUID commentId, UserEntity user, ClientEntity client, PostEntity post) {
+    this.commentId = commentId;
+    this.user = user;
+    this.client = client;
+    this.post = post;
+  }
 
-    @PreUpdate
-    protected void onUpdate() {
-        commentUpdatedTime = new Date();
-    }
+  @PrePersist
+  protected void onCreate() {
+    commentCreatedTime = new Date();
+  }
 
-    private Integer LikesNum;
-
-    private Integer dislikesNum;
-
-    @Lob
-    private String content;
+  @PreUpdate
+  protected void onUpdate() {
+    commentUpdatedTime = new Date();
+  }
 }

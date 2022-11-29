@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    private ClientEntityRepository clientEntityRepository;
+  private final ClientEntityRepository clientEntityRepository;
 
-    public ClientServiceImpl(ClientEntityRepository clientEntityRepository) {
-        this.clientEntityRepository = clientEntityRepository;
-    }
+  public ClientServiceImpl(ClientEntityRepository clientEntityRepository) {
+    this.clientEntityRepository = clientEntityRepository;
+  }
 
-    @Override
-    public Client createClient(Client client) {
-        ClientEntity clientEntity = new ClientEntity();
+  @Override
+  public Client createClient(Client client) {
+    ClientEntity clientEntity = new ClientEntity();
 
-        BeanUtils.copyProperties(client, clientEntity);
-        clientEntityRepository.save(clientEntity);
+    BeanUtils.copyProperties(client, clientEntity);
+    clientEntityRepository.save(clientEntity);
 
-        client.setClientId(clientEntity.getClientId());
-        return client;
-    }
+    client.setClientId(clientEntity.getClientId());
+    return client;
+  }
 }

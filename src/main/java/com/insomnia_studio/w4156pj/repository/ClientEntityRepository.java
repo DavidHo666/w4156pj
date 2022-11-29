@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface ClientEntityRepository extends JpaRepository<ClientEntity, Long> {
-    boolean existsByClientId(UUID clientId);
+  boolean existsByClientId(UUID clientId);
 
-    ClientEntity findByClientId(UUID clientId);
+  ClientEntity findByClientId(UUID clientId);
 }

@@ -1,6 +1,5 @@
 package com.insomnia_studio.w4156pj.controller;
 
-import com.insomnia_studio.w4156pj.controller.PostController;
 import com.insomnia_studio.w4156pj.model.Post;
 import com.insomnia_studio.w4156pj.service.PostService;
 import org.junit.jupiter.api.DisplayName;
@@ -8,144 +7,164 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
-/*
+
 @WebMvcTest(PostControllerTest.class)
 
 public class PostControllerTest {
 
-    @Mock
-    private PostService postService;
+  @Mock
+  private PostService postService;
 
 
-    @InjectMocks
-    private PostController postController;
+  @InjectMocks
+  private PostController postController;
 
 
-    @DisplayName("Test for AddPost Method")
-    @Test
-    public void testAddPost() throws Exception {
+  @DisplayName("Test for AddPost Method")
+  @Test
+  public void testAddPost() throws Exception {
 
-        UUID id = UUID.randomUUID();
-        Post post = new Post(id,new HashSet<>(Arrays.asList("tag1")),"title1","content1",new Date(), new Date());
-        when(postService.addPost(post)).thenReturn(post);
-        Post addedpost = postController.addPost(post);
-        assertEquals(post,addedpost);
+    UUID postId = UUID.randomUUID();
+    UUID clientId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
+    Post post = new Post(postId, clientId, userId, "testPost", "testPost");
+    when(postService.addPost(post)).thenReturn(post);
+    Post addedpost = postController.addPost(post);
+    assertEquals(post, addedpost);
+  }
 
-    }
 
-    @DisplayName("Test for getpostbyid Method non-null return")
-    @Test
-    public void testgetPostByPostIdtrue(){
-        //setup
-        UUID id = UUID.randomUUID();
-        Post post = new Post(id,new HashSet<>(Arrays.asList("tag1")),"title1","content1",new Date(), new Date());
+  @DisplayName("Test for getpostbyid Method non-null return")
+  @Test
+  public void testGetPostByPostIdTrue() throws Exception {
+    //setup
+    UUID postId = UUID.randomUUID();
+    UUID clientId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
+    Post post = new Post(postId, clientId, userId, "testPost", "testPost");
 
-        //when
-        when(postService.getPostById(id)).thenReturn(Optional.of(post));
+    //when
+    when(postService.getPostById(postId, post)).thenReturn(post);
 
-        //test
-        Optional<Post> foundpost = postController.getPostByPostId(id);
+    //test
+    Post foundPost = postController.getPostByPostId(postId, post);
 
-        //assert
-        assertTrue(foundpost.isPresent());
-        assertEquals(post,foundpost.get());
-    }
+    //assert
+    assertEquals(post, foundPost);
+  }
 
-    @DisplayName("Test for getpostbyid Method null return")
-    @Test
-    public void testgetPostByPostIdfalse(){
-        //setup
-        UUID id = UUID.randomUUID();
-        Post post = new Post(id,new HashSet<>(Arrays.asList("tag1")),"title1","content1",new Date(), new Date());
 
-        //when
-        when(postService.getPostById(id)).thenReturn(Optional.empty());
+  @DisplayName("Test for getpostbyid Method null return")
+  @Test
+  public void testgetPostByPostNull() throws Exception {
+    //setup
+    UUID postId = UUID.randomUUID();
+    UUID clientId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
+    Post post = new Post(postId, clientId, userId, "testPost", "testPost");
 
-        //test
-        Optional<Post> foundpost = postController.getPostByPostId(id);
+    //when
+    when(postService.getPostById(postId, post)).thenReturn(null);
 
-        //assert
-        assertTrue(foundpost.isEmpty());
-    }
+    //test
+    Post foundPost = postController.getPostByPostId(postId, post);
 
-    @DisplayName("Test for updatepostbyid Method non-null return")
-    @Test
-    public void testupdatePostByPostIdtrue() throws Exception {
-        //setup
-        UUID id = UUID.randomUUID();
-        Post post = new Post(null,new HashSet<>(Arrays.asList("tag1")),"title1","content1",null, null);
-        Post postreturn = post;
-        postreturn.setPostId(id);
-        postreturn.setPostCreatedTime(new Date());
-        postreturn.setPostUpdatedTime(new Date());
-        //when
-        when(postService.updatePostById(id,post)).thenReturn(Optional.of(postreturn));
+    //assert
+    assertNull(foundPost);
 
-        //test
-        Optional<Post> updatedpost = postController.updatePostByPostId(id,post);
+  }
 
-        //assert
-        assertTrue(updatedpost.isPresent());
-        assertEquals(postreturn,updatedpost.get());
-    }
 
-    @DisplayName("Test for updatepostbyid Method null return")
-    @Test
-    public void testupdatePostByPostIdfalse() throws Exception {
-        //setup
-        UUID id = UUID.randomUUID();
-        Post post = new Post(null,new HashSet<>(Arrays.asList("tag1")),"title1","content1",null, null);
-        Post postreturn = post;
-        postreturn.setPostId(id);
-        postreturn.setPostCreatedTime(new Date());
-        postreturn.setPostUpdatedTime(new Date());
-        //when
-        when(postService.updatePostById(id,post)).thenReturn(Optional.empty());
-        //test
-        Optional<Post> updatedpost = postController.updatePostByPostId(id,post);
-        //assert
-        assertTrue(updatedpost.isEmpty());
-    }
+  @DisplayName("Test for updatepostbyid Method non-null return")
+  @Test
+  public void testUpdatePostByPostIdTrue() throws Exception {
+    //setup
+    UUID postId = UUID.randomUUID();
+    UUID clientId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
+    Post post = new Post(postId, clientId, userId, "testPost", "testPost");
 
-    @DisplayName("Test for deletePostByPostId method")
-    @Test
-    public void testdeletePostByPostId() {
-        UUID id = UUID.randomUUID();
-        Map<String,Boolean> responsetrue = new HashMap<>();
-        responsetrue.put("Deleted", Boolean.TRUE);
-        Map<String,Boolean> responsefalse = new HashMap<>();
-        responsefalse.put("Deleted", Boolean.FALSE);
-        when(postService.deletePostById(id)).thenReturn(Boolean.TRUE);
+    //when
+    when(postService.updatePostById(postId, post)).thenReturn(post);
 
-        Map<String,Boolean> respt = postController.deletePostByPostId(id);
+    //test
+    Post updatePost = postController.updatePostByPostId(postId, post);
 
-        when(postService.deletePostById(id)).thenReturn(Boolean.FALSE);
-        Map<String,Boolean> respf = postController.deletePostByPostId(id);
+    //assert
+    assertEquals(post, updatePost);
+  }
 
-        assertEquals(responsetrue,respt);
-        assertEquals(responsefalse,respf);
 
-    }
+  @DisplayName("Test for updatepostbyid Method null return")
+  @Test
+  public void testUpdatePostByPostNull() throws Exception {
+    //setup
+    UUID postId = UUID.randomUUID();
+    UUID clientId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
+    Post post = new Post(postId, clientId, userId, "testPost", "testPost");
 
-    @Test
-    public void testgetPostByID() throws Exception {
-        UUID id = UUID.randomUUID();
-        Post post = new Post(id,new HashSet<>(Arrays.asList("tag1")),"title1","content1",new Date(), new Date());
-        when(postService.addPost(Mockito.any(Post.class))).thenReturn(post);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/post")
-                        .content(new ObjectMapper().writeValueAsString(post)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.postId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.tags").value(new HashSet<>(Arrays.asList("tag1"))))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("title1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content").value("content1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.postCreatedTime").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.postUpdatedTime").exists())
-                .andExpect(status().isCreated());
-    }
+    //when
+    when(postService.updatePostById(postId, post)).thenReturn(null);
+
+    //test
+    Post updatePost = postController.updatePostByPostId(postId, post);
+
+    //assert
+    assertNull(updatePost);
+  }
+
+
+  @DisplayName("Test for deletePostByPostId method")
+  @Test
+  public void testDeletePostByPostId() throws Exception {
+    //setup
+    UUID postId = UUID.randomUUID();
+    UUID clientId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
+    Post post = new Post(postId, clientId, userId, "testPost", "testPost");
+    Map<String, Boolean> expectResponse = new HashMap<>();
+    expectResponse.put("Deleted", Boolean.TRUE);
+
+    //when
+    when(postService.deletePostById(postId, post)).thenReturn(Boolean.TRUE);
+
+    //test
+    Map<String, Boolean> deleteResponse = postController.deletePostByPostId(postId, post);
+
+    //assert
+    assertEquals(expectResponse, deleteResponse);
+  }
+
+  @DisplayName("Test for deletePostByPostId method fail to delete")
+  @Test
+  public void testDeletePostByPostIdFalse() throws Exception {
+    //setup
+    UUID postId = UUID.randomUUID();
+    UUID clientId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
+    Post post = new Post(postId, clientId, userId, "testPost", "testPost");
+    Map<String, Boolean> expectResponse = new HashMap<>();
+    expectResponse.put("Deleted", Boolean.FALSE);
+
+    //when
+    when(postService.deletePostById(postId, post)).thenReturn(Boolean.FALSE);
+
+    //test
+    Map<String, Boolean> deleteResponse = postController.deletePostByPostId(postId, post);
+
+    //assert
+    assertEquals(expectResponse, deleteResponse);
+  }
+
+
 }
-*/
