@@ -1,5 +1,10 @@
 package com.insomnia_studio.w4156pj.entity;
 
+import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,11 +13,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "user")
@@ -59,34 +59,10 @@ public class UserEntity {
     this.client = client;
   }
 
-//    public void addPost(PostEntity postEntity) {
-//        posts.add(postEntity);
-//        postEntity.setUser(this);
-//    }
-//
-//    public void removePost(PostEntity postEntity) {
-//        posts.remove(postEntity);
-//        postEntity.setUser(null);
-//    }
 
   @PrePersist
   protected void onCreate() {
     userCreatedTime = new Date();
   }
 
-  //    public void addFollower(UUID followId) {
-//        followers.add(followId);
-//    }
-//
-//    public void addFollowedBy(UUID userId) {
-//        followedBy.add(userId);
-//    }
-//
-//    public void removeFollower(UUID followId) {
-//        followers.remove(followId);
-//    }
-//
-//    public void removeFollowBy(UUID userId) {
-//        followedBy.remove(userId);
-//    }
 }

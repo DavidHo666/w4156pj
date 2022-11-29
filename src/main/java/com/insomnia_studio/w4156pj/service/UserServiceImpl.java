@@ -10,7 +10,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.transaction.Transactional;
 import java.util.UUID;
 
@@ -79,7 +78,8 @@ public class UserServiceImpl implements UserService {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Client ID");
       }
       if (userEntity.getPosts().size() > 0 || userEntity.getComments().size() > 0) {
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user has post or comment, can't be deleted.");
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "The user has post or comment, can't be deleted.");
       }
       Boolean is_deleted = (userEntityRepository.deleteUserEntityByUserId(userId) == 1);
       return is_deleted;
@@ -87,61 +87,4 @@ public class UserServiceImpl implements UserService {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
     }
   }
-
-//    @Override
-//    public List<User> addFollower(UUID userId, UUID followerId) throws Exception{
-//        return changeFollower(userId, followerId, "add");
-//    }
-//
-//    @Override
-//    public List<User> deleteFollower(UUID userId, UUID followerId) throws Exception{
-//        return changeFollower(userId, followerId, "remove");
-//    }
-//
-//    private List<User> changeFollower(UUID userId, UUID followerId, String operation) throws ResponseStatusException {
-//        UserEntity userEntity = userEntityRepository.findByUserId(userId);
-//        if (operation == "add") {
-//            try {
-//                userEntity.addFollower(followerId);
-//            }
-//            catch (Exception e){
-//                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
-//            }
-//        } else{
-//            try {
-//                userEntity.removeFollower(followerId);
-//            }
-//            catch (Exception e){
-//                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
-//            }
-//        }
-//        userEntity = userEntityRepository.save(userEntity);
-//        User user1 = new User();
-//        BeanUtils.copyProperties(userEntity, user1);
-//
-//        userEntity = userEntityRepository.findByUserId(followerId);
-//        if (operation == "add") {
-//            try {
-//                userEntity.addFollowedBy(userId);
-//            }
-//            catch (Exception e){
-//                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
-//            }
-//        } else {
-//            try {
-//                userEntity.removeFollowBy(userId);
-//            }
-//            catch (Exception e){
-//                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ID not found");
-//            }
-//        }
-//        userEntity = userEntityRepository.save(userEntity);
-//        User user2 = new User();
-//        BeanUtils.copyProperties(userEntity, user2);
-//
-//        List<User> response =new ArrayList<User>();
-//        response.add(user1);
-//        response.add(user2);
-//        return response;
-//    }
 }
