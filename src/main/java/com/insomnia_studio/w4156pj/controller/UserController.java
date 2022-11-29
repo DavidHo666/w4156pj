@@ -2,12 +2,12 @@ package com.insomnia_studio.w4156pj.controller;
 
 import com.insomnia_studio.w4156pj.model.User;
 import com.insomnia_studio.w4156pj.service.UserService;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -31,20 +31,11 @@ public class UserController {
   }
 
   @DeleteMapping("/{userId}")
-  public Map<String, Boolean> deleteUser(@PathVariable UUID userId, @RequestBody User user) throws Exception {
+  public Map<String, Boolean> deleteUser(@PathVariable UUID userId,
+                                         @RequestBody User user) throws Exception {
     Map<String, Boolean> response = new HashMap<>();
     response.put("Deleted: ", userService.deleteUserById(userId, user));
     return response;
   }
-
-//    @PutMapping("/{userId}/addFollower/{followerId}")
-//    public List<User> addFollower(@PathVariable UUID userId, @PathVariable UUID followerId) throws Exception{
-//        return userService.addFollower(userId, followerId);
-//    }
-//
-//    @PutMapping("/{userId}/deleteFollower/{followerId}")
-//    public List<User> deleteFollower(@PathVariable UUID userId, @PathVariable UUID followerId) throws Exception{
-//        return userService.deleteFollower(userId, followerId);
-//    }
 
 }
