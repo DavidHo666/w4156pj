@@ -2,6 +2,7 @@ package com.insomnia_studio.w4156pj.service;
 
 
 import com.insomnia_studio.w4156pj.entity.ClientEntity;
+import com.insomnia_studio.w4156pj.entity.CommentEntity;
 import com.insomnia_studio.w4156pj.entity.PostEntity;
 import com.insomnia_studio.w4156pj.entity.UserEntity;
 import com.insomnia_studio.w4156pj.model.Post;
@@ -10,6 +11,7 @@ import com.insomnia_studio.w4156pj.repository.PostEntityRepository;
 
 import com.insomnia_studio.w4156pj.repository.UserEntityRepository;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +21,13 @@ import org.mockito.Mockito;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +48,8 @@ public class PostServiceImplTest {
     private ClientEntity client;
     private UserEntity user;
     private Post post;
+
+    private Post postclient;
     private PostEntity postEntity;
     private Post expectedpost;
 
@@ -50,7 +57,6 @@ public class PostServiceImplTest {
     private PostEntity newPostEntity;
     private Post updatePost;
 
-    /*
     @BeforeEach
     public void setup(){
         //setup client
@@ -58,7 +64,8 @@ public class PostServiceImplTest {
         client.setClientId(UUID.randomUUID());
         //setup user
         user = new UserEntity();
-        user.setUserId("123");
+        user.setUserId(UUID.randomUUID());
+        user.setClient(client);
         //setup post
         post = new Post();
         post.setClientId(client.getClientId());
@@ -67,6 +74,9 @@ public class PostServiceImplTest {
         post.setContent("content");
         post.setTags(new HashSet<>(Arrays.asList("tag")));
         post.setUserId(user.getUserId());
+        postclient = new Post();
+        postclient.setClientId(client.getClientId());
+
         //setup postEntity
         postEntity = new PostEntity();
         BeanUtils.copyProperties(post,postEntity);
@@ -87,6 +97,7 @@ public class PostServiceImplTest {
         newpost.setTags(new HashSet<>(Arrays.asList("newtag")));
         newpost.setTitle("newtitle");
         newpost.setContent("newcontent");
+        newpost.setClientId(postEntity.getClient().getClientId());
         newPostEntity = new PostEntity();
         BeanUtils.copyProperties(postEntity,newPostEntity);
         newPostEntity.setTags(newpost.getTags());
@@ -101,12 +112,11 @@ public class PostServiceImplTest {
     }
 
 
-
-
-    //JUnit Test for addPostsuccess
+    //JUnit Test for testAddPostsuccess
     @Test
-    public void testAddPostsuccess() throws Exception {
+    public void testAddPostsuccess(){
         // when
+        when(clientEntityRepository.findByClientId(post.getClientId())).thenReturn(client);
         when(userRepository.findByUserId(post.getUserId())).thenReturn(user);
         when(clientEntityRepository.existsByClientId(post.getClientId())).thenReturn(true);
         when(postRepository.save(Mockito.any(PostEntity.class))).thenReturn(postEntity);
@@ -116,48 +126,136 @@ public class PostServiceImplTest {
         assertEquals(expectedpost,addedpost);
     }
 
-    //JUnit Test for addPostInvalidClient
+    //JUnit Test for testAddPostClientNotExist
     @Test
-    public void testAddPostInvalidClient() throws Exception {
-
-        NullPointerException e = new NullPointerException();
+    public void testAddPostClientNotExist(){
         // when
-        when(clientRepository.existsByClientId(post.getClientId())).thenReturn(false);
-        when(userRepository.findByUserId(post.getUserId())).thenReturn(user);
-        when(postRepository.save(Mockito.any(PostEntity.class))).thenReturn(postEntity);
-        //assertion
+        when(clientEntityRepository.existsByClientId(post.getClientId())).thenReturn(false);
 
-        Exception exception = assertThrows(Exception.class, () ->
+        ResponseStatusException e = assertThrows(ResponseStatusException.class, () ->
                 postserviceimpl.addPost(post));
+        assertEquals(HttpStatus.FORBIDDEN,e.getStatus());
+        //assertEquals("403 FORBIDDEN \"Invalid Client ID\" ",e.getMessage());
+    }
 
-        assertEquals("Could not save Post: " + e, exception.getMessage());
+    //JUnit Test for testAddPostUserNotFound
+    @Test
+    public void testAddPostUserNotFound(){
+        //when(clientEntityRepository.findByClientId(post.getClientId())).thenReturn(client);
+        when(userRepository.findByUserId(post.getUserId())).thenReturn(null);
+        when(clientEntityRepository.existsByClientId(post.getClientId())).thenReturn(true);
+        //when(postRepository.save(Mockito.any(PostEntity.class))).thenReturn(postEntity);
+        ResponseStatusException e = assertThrows(ResponseStatusException.class, () ->
+                postserviceimpl.addPost(post));
+        assertEquals(HttpStatus.NOT_FOUND,e.getStatus());
+    }
 
+    //JUnit Test for addPostInvalidUser
+    @Test
+    public void testAddPostClientNotMatch(){
+        /*
+        //PostEntity post = new PostEntity();
+        //post.setTitle("a");
+        //post.setPostId(UUID.randomUUID());
+        //UserEntity user = new UserEntity();
+        //user.setUserId("123");
+        UUID postId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID clientId = UUID.randomUUID();
+        UUID commentId = UUID.randomUUID();
+        UUID fakeClientId = UUID.randomUUID();
+        ClientEntity client = new ClientEntity(clientId, "testClient");
+        ClientEntity fakeClient = new ClientEntity(fakeClientId, "fakeClient");
+        UserEntity user = new UserEntity(userId, "testUser", "testUser", client);
+        PostEntity post = new PostEntity(postId, user, client);
+        Comment comment = new Comment(clientId, userId, postId, 1, 0, "testComment");
+        comment.setCommentId(commentId);
+        CommentEntity commentEntity = new CommentEntity(commentId, user, fakeClient, post);
+        commentEntity.setLikesNum(1);
+        commentEntity.setDislikesNum(0);
+        commentEntity.setContent("testComment");
+
+        Mockito.when(commentEntityRepository.findByCommentId(commentId)).thenReturn(commentEntity);
+
+        try {
+            Comment foundComment = commentService.getCommentById(commentId, comment);
+        } catch (ResponseStatusException e) {
+            Assertions.assertEquals(e.getStatus(), HttpStatus.FORBIDDEN);
+        }
+
+        */
+
+
+
+        UUID fakeuserId = UUID.randomUUID();
+        UUID fakeClientId = UUID.randomUUID();
+        ClientEntity fakeClient = new ClientEntity(fakeClientId, "fakeClient");
+        UserEntity fakeuser = new UserEntity(fakeuserId, "testUser", "testUser", fakeClient);
+        //postEntity.setUser(fakeuser);
+
+        //when(clientEntityRepository.findByClientId(post.getClientId())).thenReturn(client);
+        //when(userRepository.findByUserId(post.getUserId())).thenReturn(fakeuser);
+        //when(clientEntityRepository.existsByClientId(post.getClientId())).thenReturn(true);
+        //when(postRepository.save(Mockito.any(PostEntity.class))).thenReturn(postEntity);
+
+        //test
+        post.setUserId(fakeuserId);
+        try {
+            Post addpost1 = postserviceimpl.addPost(post);
+        } catch (ResponseStatusException e) {
+            assertEquals(e.getStatus(), HttpStatus.FORBIDDEN);
+        }
+        //ResponseStatusException e = assertThrows(ResponseStatusException.class, () ->
+        //postserviceimpl.addPost(post));
+        //assertEquals(HttpStatus.FORBIDDEN,e.getStatus());
     }
 
 
-    //JUnit Test for getPostByIdsuccess
+    //JUnit Test for testgetPostByIdsuccess
     @Test
-    public void testgetPostByIdsuccess() throws Exception {
+    public void testgetPostByIdsuccess(){
         // when
         when(postRepository.findByPostId(post.getPostId())).thenReturn(postEntity);
         //test
-        Post foundpost = postserviceimpl.getPostById(post.getPostId());
+        Post foundpost = postserviceimpl.getPostById(post.getPostId(),postclient);
         //assertion
         assertEquals(expectedpost,foundpost);
     }
 
-    //JUnit Test for getPostByIdNotFound
+
+    //JUnit Test for testgetPostByIdNotFound
     @Test
-    public void testgetPostByIdNotFound() throws Exception {
-        NullPointerException e = new NullPointerException();
+    public void testgetPostByIdNotFound(){
+        //NullPointerException e = new NullPointerException();
         // when
-        when(postRepository.findByPostId(post.getPostId())).thenThrow(e);
+        when(postRepository.findByPostId(post.getPostId())).thenReturn(null);
 
         //assertion
-        Exception exception = assertThrows(Exception.class, () ->
-                postserviceimpl.getPostById(post.getPostId()));
+        ResponseStatusException e = assertThrows(ResponseStatusException.class, () ->
+                postserviceimpl.getPostById(post.getPostId(),postclient));
 
-        assertEquals("Could not find postId: " + e, exception.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND,e.getStatus());
+
+    }
+
+    //JUnit Test for testgetPostByIdInvalidClient()
+    @Test
+    public void testgetPostClientNotMatch() {
+        postclient = new Post();
+        postclient.setClientId(client.getClientId());
+        UUID fakeClientId = UUID.randomUUID();
+        ClientEntity fakeClient = new ClientEntity(fakeClientId, "fakeClient");
+        PostEntity fakepostEntity = new PostEntity(post.getPostId(), user, fakeClient);
+        when(postRepository.findByPostId(post.getPostId())).thenReturn(fakepostEntity);
+
+        //assertion
+        //ResponseStatusException e = assertThrows(ResponseStatusException.class, () ->
+        //postserviceimpl.getPostById(post.getPostId(),postclient));
+        try {
+            Post getpost1 = postserviceimpl.getPostById(post.getPostId(), postclient);
+        } catch (ResponseStatusException e) {
+            assertEquals(HttpStatus.FORBIDDEN, e.getStatus());
+        }
 
     }
 
@@ -169,7 +267,7 @@ public class PostServiceImplTest {
         when(postRepository.findByPostId(Mockito.any(UUID.class))).thenReturn(postEntity);
         when(postRepository.save(Mockito.any(PostEntity.class))).thenReturn(newPostEntity);
         //test
-        Post updatedpost = postserviceimpl.updatePostById(newpost.getPostId(),newpost);
+        Post updatedpost = postserviceimpl.updatePostById(postEntity.getPostId(),newpost);
 
         //assertion
         assertEquals(updatePost,updatedpost);
@@ -180,35 +278,133 @@ public class PostServiceImplTest {
     @Test
     public void testUpdatePostByIdFailed() throws Exception {
 
-        NullPointerException e = new NullPointerException();
         // when
-        when(postRepository.findByPostId(newpost.getPostId())).thenThrow(e);
+        when(postRepository.findByPostId(postEntity.getPostId())).thenReturn(null);
 
         //assertion
         Exception exception = assertThrows(Exception.class, () ->
-                postserviceimpl.updatePostById(newpost.getPostId(),newpost));
+                postserviceimpl.updatePostById(postEntity.getPostId(), newpost));
 
-        assertEquals("Could not update Post: " + e, exception.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND + " \"Post ID not found\"", exception.getMessage());
 
     }
 
     //JUnit Test for deletePostById
     @Test
-    public void testDeletePostById(){
+    public void testDeletePostById() {
+        //setup
+        UUID clientId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
 
-        // when true
-        when(postRepository.deletePostEntityByPostId(post.getPostId())).thenReturn(1);
+        ClientEntity client = new ClientEntity(clientId, "testClient");
+        UserEntity user = new UserEntity(userId, "testUser", "testUser", client);
+        PostEntity postEntity = new PostEntity(postId, user, client);
+        postEntity.setTitle("testPost");
+        postEntity.setContent("testPost");
+        Post post = new Post(postId, clientId, userId, "testPost", "testPost");
+        Boolean expectResponse = true;
 
-        Boolean deletetrue = postserviceimpl.deletePostById(post.getPostId(), post);
-        assertTrue(deletetrue);
-        // when false
-        when(postRepository.deletePostEntityByPostId(post.getPostId())).thenReturn(0);
+        //when
+        Mockito.when(postRepository.findByPostId(postId)).thenReturn(postEntity);
+        Mockito.when(postRepository.deletePostEntityByPostId(postId)).thenReturn(1);
 
-        Boolean deletefalse = postserviceimpl.deletePostById(post.getPostId(), post);
-        assertFalse(deletefalse);
+        //test
+        Boolean deleteResponse = postserviceimpl.deletePostById(postId, post);
+
+        //assert
+        Assertions.assertEquals(expectResponse, deleteResponse);
     }
 
-     */
+    @Test
+    public void testDeletePostByIdInvalidClient() {
+        //setup
+        UUID clientId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID fakeClientId = UUID.randomUUID();
+
+        ClientEntity client = new ClientEntity(clientId, "testClient");
+        UserEntity user = new UserEntity(userId, "testUser", "testUser", client);
+        PostEntity postEntity = new PostEntity(postId, user, client);
+        postEntity.setTitle("testPost");
+        postEntity.setContent("testPost");
+        Post post = new Post(postId, fakeClientId, userId, "testPost", "testPost");
+        Boolean expectResponse = true;
+
+        //when
+        Mockito.when(postRepository.findByPostId(postId)).thenReturn(postEntity);
+
+        //test
+        try{
+            Boolean deleteResponse = postserviceimpl.deletePostById(postId, post);
+        }
+        catch(ResponseStatusException e) {
+            Assertions.assertEquals(HttpStatus.FORBIDDEN, e.getStatus());
+        }
+    }
+
+    @Test
+    public void testDeletePostByIdInvalidPost() {
+        //setup
+        UUID clientId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+
+        ClientEntity client = new ClientEntity(clientId, "testClient");
+        UserEntity user = new UserEntity(userId, "testUser", "testUser", client);
+        PostEntity postEntity = new PostEntity(postId, user, client);
+        postEntity.setTitle("testPost");
+        postEntity.setContent("testPost");
+        Post post = new Post(postId, clientId, userId, "testPost", "testPost");
+        Boolean expectResponse = true;
+
+        //when
+        Mockito.when(postRepository.findByPostId(postId)).thenReturn(null);
+
+        //test
+        try{
+            Boolean deleteResponse = postserviceimpl.deletePostById(postId, post);
+        }
+        catch(ResponseStatusException e) {
+            Assertions.assertEquals(HttpStatus.NOT_FOUND, e.getStatus());
+        }
+    }
+
+    @Test
+    public void testDeletePostByIdInvalidComment() {
+        //setup
+        UUID clientId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID postId = UUID.randomUUID();
+        UUID commentId = UUID.randomUUID();
+
+
+        ClientEntity client = new ClientEntity(clientId, "testClient");
+        UserEntity user = new UserEntity(userId, "testUser", "testUser", client);
+        PostEntity postEntity = new PostEntity(postId, user, client);
+        postEntity.setTitle("testPost");
+        postEntity.setContent("testPost");
+        Post post = new Post(postId, clientId, userId, "testPost", "testPost");
+        Boolean expectResponse = true;
+
+        CommentEntity commentEntity = new CommentEntity(commentId, user, client, postEntity);
+        Set<CommentEntity> comments = new HashSet<>();
+        comments.add(commentEntity);
+        postEntity.setComments(comments);
+
+        //when
+        Mockito.when(postRepository.findByPostId(postId)).thenReturn(postEntity);
+
+        //test
+        try{
+            Boolean deleteResponse = postserviceimpl.deletePostById(postId, post);
+        }
+        catch(ResponseStatusException e) {
+            Assertions.assertEquals(HttpStatus.FORBIDDEN, e.getStatus());
+        }
+    }
+
 
 }
 
