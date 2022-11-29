@@ -3,6 +3,7 @@ package com.insomnia_studio.w4156pj;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insomnia_studio.w4156pj.controller.CommentController;
 import com.insomnia_studio.w4156pj.controller.PostController;
+import com.insomnia_studio.w4156pj.controller.UserController;
 import com.insomnia_studio.w4156pj.model.Client;
 import com.insomnia_studio.w4156pj.model.Comment;
 import com.insomnia_studio.w4156pj.model.Post;
@@ -46,6 +47,9 @@ class W4156ApplicationTests {
 
 	@Autowired
 	private ClientEntityRepository clientEntityRepository;
+
+	@Autowired
+	private UserController userController;
 
 	@Autowired
 	private PostController postController;
@@ -206,9 +210,52 @@ class W4156ApplicationTests {
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 	}
 
-
 	@Test
 	@Order(10)
+	void testDeleteUserValidClient() throws Exception {
+		User user = new User(testClientId, "test4", "user4");
+
+		UUID userIdDelete = userController.addUser(user).getUserId();
+
+		// Delete the post
+		mockMvc.perform(MockMvcRequestBuilders
+						.delete("/api/v1/user/".concat(userIdDelete.toString()))
+						.content(new ObjectMapper().writeValueAsString(user))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+
+	@Test
+	@Order(11)
+	void testDeleteUserInvalidClient() throws Exception {
+		User user = new User(fakeClientId, "test4", "user4");
+
+		// Delete the post
+		mockMvc.perform(MockMvcRequestBuilders
+						.delete("/api/v1/user/".concat(testUserId.toString()))
+						.content(new ObjectMapper().writeValueAsString(user))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
+	@Test
+	@Order(12)
+	void testDeleteUserInvalidUser() throws Exception {
+		User user = new User(testClientId, "test4", "user4");
+
+		// Delete the post
+		mockMvc.perform(MockMvcRequestBuilders
+						.delete("/api/v1/user/".concat(fakeUserId.toString()))
+						.content(new ObjectMapper().writeValueAsString(user))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+
+	@Test
+	@Order(13)
 	void testAddPostValidClientValidUser() throws Exception {
 		Set<String> tags = new HashSet<>();
 		tags.add("tag1");
@@ -230,7 +277,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(11)
+	@Order(14)
 	void testGetPostValidClientValidUser() throws Exception {
 		Post post = new Post(testClientId);
 
@@ -246,7 +293,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(12)
+	@Order(15)
 	void testUpdatePostValidClientValidUser() throws Exception {
 		Set<String> tags = new HashSet<>();
 		tags.add("tag3");
@@ -265,7 +312,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(13)
+	@Order(16)
 	void testDeletePostValidClientValidUser() throws Exception {
 		Set<String> tags = new HashSet<>();
 		tags.add("tag3");
@@ -284,7 +331,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(14)
+	@Order(17)
 	void testAddCommentValidClientValidUser() throws Exception {
 		Comment comment = new Comment(testClientId, testUserId, testPostId, 10, 2, "testComment");
 
@@ -305,7 +352,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(15)
+	@Order(18)
 	void testGetCommentValidClientValidUser() throws Exception {
 		Comment comment = new Comment(testClientId);
 
@@ -324,7 +371,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(16)
+	@Order(19)
 	void testGetCommentInValidClientValidUser() throws Exception {
 		Comment comment = new Comment(fakeClientId);
 
@@ -338,7 +385,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(17)
+	@Order(20)
 	void testGetCommentInvalidClientInvalidComment() throws Exception {
 		Comment comment = new Comment(testClientId);
 
@@ -352,7 +399,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(18)
+	@Order(21)
 	void testUpdateCommentValidClientValidComment() throws Exception {
 		Comment comment = new Comment(testClientId, testUserId, testPostId, 10, 2, "testComment2");
 
@@ -371,7 +418,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(19)
+	@Order(22)
 	void testUpdateCommentInvalidClientValidComment() throws Exception {
 		Comment comment = new Comment(fakeClientId, testUserId, testPostId, 10, 2, "testComment2");
 
@@ -385,7 +432,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(20)
+	@Order(23)
 	void testUpdateCommentValidClientInvalidComment() throws Exception {
 		Comment comment = new Comment(testClientId, testUserId, testPostId, 10, 2, "testComment2");
 
@@ -399,7 +446,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(21)
+	@Order(24)
 	void testAddLikeToCommentValidClientValidCommentId() throws Exception {
 		Comment comment = new Comment(testClientId);
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -413,7 +460,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(22)
+	@Order(25)
 	void testAddDislikeToCommentValidClientValidCommentId() throws Exception {
 		Comment comment = new Comment(testClientId);
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -427,7 +474,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(23)
+	@Order(26)
 	void testAddLikeToCommentInvalidClientValidCommentId() throws Exception {
 		Comment comment = new Comment(fakeClientId);
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -441,7 +488,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(24)
+	@Order(27)
 	void testAddDislikeToCommentInvalidClientValidCommentId() throws Exception {
 		Comment comment = new Comment(fakeClientId);
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -455,7 +502,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(25)
+	@Order(28)
 	void testAddLikeToCommentValidClientInvalidCommentId() throws Exception {
 		Comment comment = new Comment(testClientId);
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -469,7 +516,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(26)
+	@Order(29)
 	void testAddDislikeToCommentValidClientInvalidCommentId() throws Exception {
 		Comment comment = new Comment(testClientId);
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -483,7 +530,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(27)
+	@Order(30)
 	void testDeleteCommentValidClientValidComment() throws Exception {
 		Comment comment = new Comment(testClientId, testUserId, testPostId, 10, 2, "testComment3");
 
@@ -499,7 +546,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(28)
+	@Order(31)
 	void testDeleteCommentInvalidClientValidComment() throws Exception {
 		Comment comment = new Comment(fakeClientId, testUserId, testPostId, 10, 2, "testComment4");
 
@@ -513,7 +560,7 @@ class W4156ApplicationTests {
 	}
 
 	@Test
-	@Order(29)
+	@Order(32)
 	void testDeleteCommentValidClientInvalidComment() throws Exception {
 		Comment comment = new Comment(fakeClientId, testUserId, testPostId, 10, 2, "testComment5");
 
