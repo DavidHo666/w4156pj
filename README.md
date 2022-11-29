@@ -113,6 +113,22 @@ Request body example:
 "content": "updatecommenttest"
 }
 
+5. POST http://localhost:8080/api/v1/comment/{{commentId}}/addDislike
+
+Request body example:
+
+{
+"clientId": "eebcecc1-7a80-443b-a210-544132f71498"
+}
+
+6. POST http://localhost:8080/api/v1/comment/{{commentId}}/addLike
+
+Request body example:
+
+   {
+   "clientId": "eebcecc1-7a80-443b-a210-544132f71498"
+   }
+
 Post:
 1. POST http://localhost:8080/api/v1/post
 
@@ -174,9 +190,6 @@ Request body example:
 "clientId": "ee865a46-bfa4-473c-831f-3be2c507bb6b"
 }
 
-5. PUT http://localhost:8080/api/v1/user/{{userId}}/addFollower/{{followerId}}
-
-6. PUT http://localhost:8080/api/v1/user/{{userId}}/deleteFollower/{{followerId}}
 
 Static Report:
 https://sonarcloud.io/summary/overall?id=DavidHo666_w4156pj
