@@ -65,16 +65,16 @@ public class PostEntity {
     }
 
     // Used for the test in the first iteration
-    public PostEntity(UUID postId, ClientEntity client, String title, String content, Set<String> tags, Set<CommentEntity> comments, Date postCreatedTime, Date postUpdatedTime) {
-        this.postId = postId;
-        this.client = client;
-        this.title = title;
-        this.content = content;
-        this.tags = tags;
-        this.comments = comments;
-        this.postCreatedTime = postCreatedTime;
-        this.postUpdatedTime = postUpdatedTime;
-    }
+//    public PostEntity(UUID postId, ClientEntity client, String title, String content, Set<String> tags, Set<CommentEntity> comments, Date postCreatedTime, Date postUpdatedTime) {
+//        this.postId = postId;
+//        this.client = client;
+//        this.title = title;
+//        this.content = content;
+//        this.tags = tags;
+//        this.comments = comments;
+//        this.postCreatedTime = postCreatedTime;
+//        this.postUpdatedTime = postUpdatedTime;
+//    }
 
     public PostEntity(UUID postId, UserEntity user, ClientEntity client) {
         this.postId = postId;

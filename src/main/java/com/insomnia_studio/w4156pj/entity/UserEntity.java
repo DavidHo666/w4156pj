@@ -55,15 +55,15 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<CommentEntity> comments;
 
-    public void addPost(PostEntity postEntity) {
-        posts.add(postEntity);
-        postEntity.setUser(this);
-    }
-
-    public void removePost(PostEntity postEntity) {
-        posts.remove(postEntity);
-        postEntity.setUser(null);
-    }
+//    public void addPost(PostEntity postEntity) {
+//        posts.add(postEntity);
+//        postEntity.setUser(this);
+//    }
+//
+//    public void removePost(PostEntity postEntity) {
+//        posts.remove(postEntity);
+//        postEntity.setUser(null);
+//    }
 
     public UserEntity(UUID userId, String firstName, String lastName, ClientEntity client) {
         this.userId = userId;

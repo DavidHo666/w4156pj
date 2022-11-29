@@ -28,16 +28,16 @@ public class Post {
 
 //     Used for the test in the first iteration
 
-    public Post(UUID postId, Set<String> tags, UUID userID, UUID clientId,String title, String content, Date postCreatedTime, Date postUpdatedTime) {
-        this.postId = postId;
-        this.userId = userID;
-        this.clientId = clientId;
-        this.tags = tags;
-        this.title = title;
-        this.content = content;
-        this.postCreatedTime = postCreatedTime;
-        this.postUpdatedTime = postUpdatedTime;
-    }
+//    public Post(UUID postId, Set<String> tags, UUID userID, UUID clientId,String title, String content, Date postCreatedTime, Date postUpdatedTime) {
+//        this.postId = postId;
+//        this.userId = userID;
+//        this.clientId = clientId;
+//        this.tags = tags;
+//        this.title = title;
+//        this.content = content;
+//        this.postCreatedTime = postCreatedTime;
+//        this.postUpdatedTime = postUpdatedTime;
+//    }
 
     public Post(UUID postId, UUID clientId, UUID userId, String title, String content) {
         this.postId = postId;
