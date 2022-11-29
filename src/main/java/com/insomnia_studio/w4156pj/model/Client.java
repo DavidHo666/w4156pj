@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-
+/**
+ * Define client Model.
+ */
 @Data
 @Builder
 @NoArgsConstructor

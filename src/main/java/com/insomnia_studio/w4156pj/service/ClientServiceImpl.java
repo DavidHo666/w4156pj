@@ -6,6 +6,9 @@ import com.insomnia_studio.w4156pj.repository.ClientEntityRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+/**
+ * Define Client Service Implementation.
+ */
 @Service
 public class ClientServiceImpl implements ClientService {
 
