@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Define User Model.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,7 +25,9 @@ public class User {
   private Set<String> followedBy;
   private Date userCreatedTime;
 
-
+  /**
+   * Define User Model Constructor.
+   */
   public User(UUID clientId, String firstName, String lastName) {
     this.clientId = clientId;
     this.firstName = firstName;
