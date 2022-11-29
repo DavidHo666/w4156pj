@@ -1,11 +1,11 @@
 package com.insomnia_studio.w4156pj.entity;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-
+/**
+ * Define User Entity.
+ */
 @Entity
 @Table(name = "user")
 @Data
@@ -52,6 +54,9 @@ public class UserEntity {
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Set<CommentEntity> comments;
 
+  /**
+   * Define User Entity Constructor.
+   */
   public UserEntity(UUID userId, String firstName, String lastName, ClientEntity client) {
     this.userId = userId;
     this.firstName = firstName;

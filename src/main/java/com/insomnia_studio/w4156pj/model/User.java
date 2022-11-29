@@ -1,14 +1,16 @@
 package com.insomnia_studio.w4156pj.model;
 
+import java.util.Date;
+import java.util.Set;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
-
+/**
+ * Define User Model.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,7 +25,9 @@ public class User {
   private Set<String> followedBy;
   private Date userCreatedTime;
 
-
+  /**
+   * Define User Model Constructor.
+   */
   public User(UUID clientId, String firstName, String lastName) {
     this.clientId = clientId;
     this.firstName = firstName;
