@@ -64,6 +64,12 @@ Test:
 		
     Test in CI:  
 	    All Unit tests have been included in the Github Action and will run on every push.  
+	    
+## How to Run Client-Service:
+
+	a. Run this Application on IntelliJ 
+	b. Run client-service.py in an interactive command-line window (in any compiler) 
+	c. Run each commented method in command line to see our server's reponse to the specific client request  
 
 ## Guidance for checking
 
@@ -112,22 +118,6 @@ Request body example:
 "postId": "53242f3a-0d56-47e7-82cc-dccdf497b322",
 "content": "updatecommenttest"
 }
-
-5. POST http://localhost:8080/api/v1/comment/{{commentId}}/addDislike
-
-Request body example:
-
-{
-"clientId": "eebcecc1-7a80-443b-a210-544132f71498"
-}
-
-6. POST http://localhost:8080/api/v1/comment/{{commentId}}/addLike
-
-Request body example:
-
-   {
-   "clientId": "eebcecc1-7a80-443b-a210-544132f71498"
-   }
 
 Post:
 1. POST http://localhost:8080/api/v1/post
@@ -190,6 +180,9 @@ Request body example:
 "clientId": "ee865a46-bfa4-473c-831f-3be2c507bb6b"
 }
 
+5. PUT http://localhost:8080/api/v1/user/{{userId}}/addFollower/{{followerId}}
+
+6. PUT http://localhost:8080/api/v1/user/{{userId}}/deleteFollower/{{followerId}}
 
 Static Report:
 https://sonarcloud.io/summary/overall?id=DavidHo666_w4156pj
@@ -202,3 +195,4 @@ under development
 
 Test Coverage:
 ![test coverage](https://github.com/DavidHo666/w4156pj/blob/master/Coverage.png?raw=true)
+
