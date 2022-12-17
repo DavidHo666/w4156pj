@@ -4,7 +4,7 @@ Team Members: Qingyue Jiao(qj2168), Dawei He(dh3027), Lixuan Yang(ly2555), Zhen 
 
 Project Description:
 
-This is an API service for formatting and managing posts for clients like StreetEasy.com, Instagram, Facebook Marketplace
+This is an API service for formatting and managing posts for clients like online Web Applications such as StreetEasy.com, Instagram and Facebook Marketplace.
 
 
 ## Platform & Framework
